@@ -20,11 +20,35 @@ int main()
 		device.reInit();
 	}
 	EffectClear clear;
+	EffectFade fade(0.9f);
 	EffectBall ball;
 	EffectRandom random;
-	EffectStatic e_static;
-	device.addEffect(&clear);
+	EffectStatic e_static(Color{0, 255, 0});
+	device.addEffect(&fade);
 	device.addEffect(&ball);
 	device.start();
-	while(1){}
+
+	MSG msg;
+    BOOL bRet;
+
+    while (1)
+    {
+        bRet = GetMessage(&msg, NULL, 0, 0);
+
+        if (bRet > 0)  // (bRet > 0 indicates a message that must be processed.)
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+        else if (bRet < 0)  // (bRet == -1 indicates an error.)
+        {
+            // Handle or log the error; possibly exit.
+            // ...
+        }
+        else  // (bRet == 0 indicates "exit program".)
+        {
+            break;
+        }
+    }
+	return msg.wParam;
 }

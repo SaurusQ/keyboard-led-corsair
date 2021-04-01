@@ -10,11 +10,11 @@
 #include <atomic>
 #include <chrono>
 #include <vector>
+#include <windows.h>
 
 #include "effect.hpp"
-#include "event.hpp"
 
-class Device
+class Device // TODO singleton
 {
     public:
         Device(unsigned int fps);                       // fps in which the effects are rendered, start to connection to the keyboard with reInit()
@@ -29,6 +29,7 @@ class Device
         bool isInitialized() { return initialized_; }   // has the reInit completed successfully
         std::string errToString(CorsairError err);      // convert from corsair error message to string
     private:
+        void setKeypressHook();                         // hooks the program to deted system wide keypresses from windows
         unsigned int fps_;                              // fps of the effects
         std::thread lightingThread_;                    // thread that handles ligthing
         std::atomic<bool> lightingThreadRunning_;       // is the ligthing thread running
@@ -37,7 +38,10 @@ class Device
         CorsairLedColor* pColors_;                      // list of all ledIds and their colors, initialized from pPositions_
         size_t numKeys_;                                // number of keys, size of pPostions_ and pColors_
         std::vector<Effect*> pEffects_;                 // effects currently in use, rendered in order from first to last
-        std::vector<Event*> pEvents_;                   // number of event currently in use
+    
+        static Device* pInstance_;
+        static HHOOK hook_;                             // hook for the current low level keyboard hook
+        static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 };
 
 #endif

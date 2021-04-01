@@ -93,6 +93,23 @@ void EffectStatic::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t l
 {
     for(int i = 0; i < len; i++)
     {
-        memcpy(&pCol[i].r, &color_, sizeof(color_));
+        std::memcpy(&pCol[i].r, &color_, sizeof(color_));
     }
+}
+
+void RE_Swipe::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+{
+    for(int i = 0; i < len; i++)
+    {
+        if(pPos[i].left < horizontalPos_) 
+            std::memcpy(&pCol[i].r, &color_, sizeof(color_));
+    }
+}
+
+void RE_Swipe::keyEvent(int keyIdx, bool keyDown,
+    CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+
+{
+    if(keyDown) horizontalPos_ += 10.0f;
+    if(horizontalPos_ > maxX) horizontalPos_ = 0.0f;
 }

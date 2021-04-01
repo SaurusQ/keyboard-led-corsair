@@ -24,8 +24,9 @@ int main()
 	EffectBall ball;
 	EffectRandom random;
 	EffectStatic e_static(Color{0, 255, 0});
+	RE_Swipe re_swipe(Color{255, 255, 255});
 	device.addEffect(&fade);
-	device.addEffect(&ball);
+	device.addReactiveEffect(&re_swipe);
 	device.start();
 
 	MSG msg;

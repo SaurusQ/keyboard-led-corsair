@@ -109,14 +109,20 @@ class EffectStatic : public Effect
         Color color_;
 };
 
-class EffectSwipe : public ReactiveEffect
+class RE_Swipe : public ReactiveEffect
 {
     public:
-        EffectSwipe(Color color) : ReactiveEffect(), color_(color) {}
-    virtual ~EffectSwipe() {}
+        RE_Swipe(Color color) : ReactiveEffect(), color_(color) {}
+    virtual ~RE_Swipe() {}
+    virtual bool onlyReactive() { return false; }
     virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+    virtual void keyEvent(int keyIdx, bool keyDown,
+        CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
     protected:
         Color color_;
+        double horizontalPos_ = 0.0f;
+        int maxX = 450;
+        int maxY = 160;
 };
 
 #endif

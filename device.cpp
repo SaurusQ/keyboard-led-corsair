@@ -86,6 +86,7 @@ void Device::stop()
 
 void Device::run()
 {
+    const std::lock_guard<std::mutex> lock(mutex_);
     /*CorsairLedColor ledColor = {CLI_Invalid, 12, 123, 12};
     for(int i = 0; i < 200; i++)
     {
@@ -150,7 +151,7 @@ LRESULT CALLBACK Device::LowLevelKeyboardProc(
 )
 {
     if(nCode >= HC_ACTION 
-        && (wParam == WM_KEYDOWN || wParam == WM_KEYUP))
+        && (wParam == WM_KEYDOWN || wParam == WM_KEYUP)) // TODO should this be async
     {
         bool keyDown = wParam == WM_KEYDOWN;
         KBDLLHOOKSTRUCT* hs = (KBDLLHOOKSTRUCT*)lParam;
@@ -165,7 +166,7 @@ void Device::setKeypressHook()
         WH_KEYBOARD_LL,
         LowLevelKeyboardProc,
         NULL,
-        NULL
+        0
     );
     if(hook_ == NULL)
         std::cout << "Hook connection failed" << std::endl;
@@ -179,9 +180,11 @@ void Device::handleReactiveEffects(char key, bool keyDown)
     int i = 0;
     for(; i < numKeys_; i++)
     {
-        if(pColors_->ledId == ledId)
+        if(pColors_[i].ledId == ledId)
             break;
     }
+    //std::cout << i << std::endl;
+    const std::lock_guard<std::mutex> lock(mutex_);
     for(auto e : pReactEffects_)
     {
         e->keyEvent(i, keyDown,

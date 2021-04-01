@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <thread>
+#include <mutex>
 #include <atomic>
 #include <chrono>
 #include <vector>
@@ -31,7 +32,7 @@ class Device // TODO singleton
         std::string errToString(CorsairError err);      // convert from corsair error message to string
     private:
         void setKeypressHook();                         // hooks the program to deted system wide keypresses from windows
-        void handleReactiveEffects();                   // handle callbacks to the reative effects
+        void handleReactiveEffects(char key, bool keyDown); // handle callbacks to the reative effects
 
         unsigned int fps_;                              // fps of the effects
         std::thread lightingThread_;                    // thread that handles ligthing
@@ -42,6 +43,7 @@ class Device // TODO singleton
         size_t numKeys_;                                // number of keys, size of pPostions_ and pColors_
         std::vector<Effect*> pEffects_;                 // effects currently in use, rendered in order from first to last
         std::vector<ReactiveEffect*> pReactEffects_;    // reactive errects currently active
+        std::mutex mutex_;                              // handle locking the lighting thread and keyboard callbacks
 
         static Device* pInstance_;
         static HHOOK hook_;                             // hook for the current low level keyboard hook

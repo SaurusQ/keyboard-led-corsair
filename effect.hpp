@@ -7,6 +7,7 @@
 #include <math.h>
 #include <utility>
 #include <cstring>
+#include <iostream>
 
 #include <CUESDK.h>
 
@@ -90,11 +91,22 @@ class EffectWave : public Effect
 class EffectStatic : public Effect
 {
     public:
-        EffectStatic() : Effect() {}
+        EffectStatic(Color color) 
+            : Effect(), color_(color) {}
         virtual ~EffectStatic() {}
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
     protected:
-        Color color_ = {0, 255, 0};
+        Color color_;
+};
+
+class EffectSwipe : public Effect
+{
+    public:
+        EffectSwipe(Color color) : Effect(), color_(color) {}
+    virtual ~EffectSwipe() {}
+    virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+    protected:
+        Color color_;
 };
 
 #endif

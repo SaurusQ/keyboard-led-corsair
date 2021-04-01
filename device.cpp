@@ -1,5 +1,7 @@
 
 #include "device.hpp"
+Device* Device::pInstance_;
+HHOOK Device::hook_;
 
 Device::Device(unsigned int fps)
     : fps_(fps)
@@ -7,6 +9,7 @@ Device::Device(unsigned int fps)
 {
     this->reInit();
     std::cout << "Successful init" << std::endl;
+    this->setKeypressHook();
 }
 
 Device::~Device()
@@ -94,7 +97,7 @@ void Device::run()
         pEff->run(pPositions_, pColors_, numKeys_);
     }
     CorsairSetLedsColorsBufferByDeviceIndex(0, numKeys_, pColors_);
-    CorsairSetLedsColorsFlushBuffer();
+    //CorsairSetLedsColorsFlushBuffer();
 }
 
 void Device::addEffect(Effect* pEff)
@@ -130,4 +133,29 @@ std::string Device::errToString(CorsairError err)
 	default:
 		return "unknown error";
 	}
+}
+
+LRESULT CALLBACK Device::LowLevelKeyboardProc(
+    int nCode,
+    WPARAM wParam,
+    LPARAM lParam
+)
+{
+    if(nCode < 0) return CallNextHookEx(hook_, nCode, wParam, lParam);
+    
+    return CallNextHookEx(hook_, nCode, wParam, lParam);
+}
+
+void Device::setKeypressHook()
+{
+    hook_ = SetWindowsHookExA(
+        WH_KEYBOARD_LL,
+        LowLevelKeyboardProc,
+        NULL,
+        NULL
+    );
+    if(hook_ == NULL)
+        std::cout << "Hook connection failed" << std::endl;
+    else
+        std::cout << "Hook connection successfull" << std::endl;
 }

@@ -24,6 +24,16 @@ void EffectClear::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t le
     }
 }
 
+void EffectFade::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+{
+    for(int i = 0; i < len; i++)
+    {
+        pCol[i].r *= fcr_;
+        pCol[i].g *= fcg_;
+        pCol[i].b *= fcb_;;
+    }
+}
+
 void EffectBall::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 {
     int diff;

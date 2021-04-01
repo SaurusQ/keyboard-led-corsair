@@ -34,13 +34,35 @@ class EffectClear : public Effect
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
 };
 
+class EffectFade : public Effect
+{
+    public:
+        EffectFade(float fcr, float fcg, float fcb)
+            : Effect(), fcr_(fcr), fcg_(fcg), fcb_(fcb) {
+            if(fcr_ < 0.0f || fcr_ > 1.0f
+                || fcg_ < 0.0f || fcg_ > 1.0f
+                || fcb_ < 0.0f || fcb_ > 1.0f)
+                throw "Wrong coef";
+        }
+        EffectFade(float fadeCoef)
+            : Effect(), fcr_(fadeCoef), fcg_(fadeCoef), fcb_(fadeCoef)
+        {
+            if(fadeCoef < 0.0f || fadeCoef > 1.0f) throw "Wrong coef";    
+        }
+        virtual ~EffectFade() {}
+        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+    protected:
+        float fcr_;
+        float fcg_;
+        float fcb_;
+};
 class EffectBall : public Effect
 {
     public:
         EffectBall();
         virtual ~EffectBall() {}
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
-    private:
+    protected:
         int posX;
         int posY;
         int maxX = 450;
@@ -55,7 +77,6 @@ class EffectRandom : public Effect
         EffectRandom() : Effect() {}
         virtual ~EffectRandom() {}
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
-    private:
 };
 
 class EffectWave : public Effect
@@ -64,7 +85,6 @@ class EffectWave : public Effect
         EffectWave() : Effect() {}
         virtual ~EffectWave() {}
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
-    private:
 };
 
 class EffectStatic : public Effect
@@ -73,7 +93,7 @@ class EffectStatic : public Effect
         EffectStatic() : Effect() {}
         virtual ~EffectStatic() {}
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
-    private:
+    protected:
         Color color_ = {0, 255, 0};
 };
 

@@ -30,17 +30,16 @@ int main()
 
 	MSG msg;
     BOOL bRet;
-
-    while (1)
+    while(true)
     {
         bRet = GetMessage(&msg, NULL, 0, 0);
 
-        if (bRet > 0)  // (bRet > 0 indicates a message that must be processed.)
+        if(bRet > 0)  // (bRet > 0 indicates a message that must be processed.)
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-        else if (bRet < 0)  // (bRet == -1 indicates an error.)
+        else if(bRet < 0)  // (bRet == -1 indicates an error.)
         {
             // Handle or log the error; possibly exit.
             // ...

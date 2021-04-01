@@ -27,6 +27,16 @@ class Effect
         int alpha; //TODO
 };
 
+class ReactiveEffect : public Effect
+{
+    public:
+        ReactiveEffect() : Effect() {}
+        virtual ~ReactiveEffect() {}
+        virtual bool onlyReactive() { return true; }
+        virtual void keyEvent(int keyIdx, bool keyDown,
+            CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len) = 0;
+};
+
 class EffectClear : public Effect
 {
     public:
@@ -99,10 +109,10 @@ class EffectStatic : public Effect
         Color color_;
 };
 
-class EffectSwipe : public Effect
+class EffectSwipe : public ReactiveEffect
 {
     public:
-        EffectSwipe(Color color) : Effect(), color_(color) {}
+        EffectSwipe(Color color) : ReactiveEffect(), color_(color) {}
     virtual ~EffectSwipe() {}
     virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
     protected:

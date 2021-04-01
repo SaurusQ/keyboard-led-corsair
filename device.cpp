@@ -7,6 +7,7 @@ Device::Device(unsigned int fps)
     : fps_(fps)
     , lightingThreadRunning_(false)
 {
+    pInstance_ = this;
     this->reInit();
     std::cout << "Successful init" << std::endl;
     this->setKeypressHook();
@@ -97,12 +98,19 @@ void Device::run()
         pEff->run(pPositions_, pColors_, numKeys_);
     }
     CorsairSetLedsColorsBufferByDeviceIndex(0, numKeys_, pColors_);
-    //CorsairSetLedsColorsFlushBuffer();
+    CorsairSetLedsColorsFlushBuffer();
 }
 
 void Device::addEffect(Effect* pEff)
 {
     pEffects_.push_back(pEff);
+}
+
+void Device::addReactiveEffect(ReactiveEffect* pReactEff)
+{
+    pReactEffects_.push_back(pReactEff);
+    if(!pReactEff->onlyReactive()) // check if the effect is only reactive
+        pEffects_.push_back(pReactEff);
 }
 
 CorsairLedColor* Device::posToColor(CorsairLedPosition* pPos, size_t len)
@@ -141,8 +149,13 @@ LRESULT CALLBACK Device::LowLevelKeyboardProc(
     LPARAM lParam
 )
 {
-    if(nCode < 0) return CallNextHookEx(hook_, nCode, wParam, lParam);
-    
+    if(nCode >= HC_ACTION 
+        && (wParam == WM_KEYDOWN || wParam == WM_KEYUP))
+    {
+        bool keyDown = wParam == WM_KEYDOWN;
+        KBDLLHOOKSTRUCT* hs = (KBDLLHOOKSTRUCT*)lParam;
+        pInstance_->handleReactiveEffects(hs->vkCode, keyDown);
+    }
     return CallNextHookEx(hook_, nCode, wParam, lParam);
 }
 
@@ -158,4 +171,20 @@ void Device::setKeypressHook()
         std::cout << "Hook connection failed" << std::endl;
     else
         std::cout << "Hook connection successfull" << std::endl;
+}
+
+void Device::handleReactiveEffects(char key, bool keyDown)
+{
+    CorsairLedId ledId = CorsairGetLedIdForKeyName(key);
+    int i = 0;
+    for(; i < numKeys_; i++)
+    {
+        if(pColors_->ledId == ledId)
+            break;
+    }
+    for(auto e : pReactEffects_)
+    {
+        e->keyEvent(i, keyDown,
+            pPositions_, pColors_, numKeys_);
+    }
 }

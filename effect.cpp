@@ -54,7 +54,7 @@ void EffectBall::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len
         diff = std::sqrt(std::pow(posX - pPos[i].left, 2) + std::pow(posY - pPos[i].top, 2));
         if(diff <= radius)
         {
-            pCol[i].r = std::abs((int)((diff - radius) * (255.0f / radius)));
+            pCol[i].r = 255; //std::abs((int)((diff - radius) * (255.0f / radius)));
         }
     }
 }

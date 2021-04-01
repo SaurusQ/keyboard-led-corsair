@@ -24,12 +24,15 @@ class Device // TODO singleton
         void stop();                                    // stop the ligthing thread
         void run();                                     // run one frame from the effects
         void addEffect(Effect* pEff);                   // add effect to be rendered
+        void addReactiveEffect(ReactiveEffect* pReactEff); // add effect that can react to keyboard presses
         CorsairLedColor* posToColor(
             CorsairLedPosition* pPos, size_t len);      // get the color of each key position
         bool isInitialized() { return initialized_; }   // has the reInit completed successfully
         std::string errToString(CorsairError err);      // convert from corsair error message to string
     private:
         void setKeypressHook();                         // hooks the program to deted system wide keypresses from windows
+        void handleReactiveEffects();                   // handle callbacks to the reative effects
+
         unsigned int fps_;                              // fps of the effects
         std::thread lightingThread_;                    // thread that handles ligthing
         std::atomic<bool> lightingThreadRunning_;       // is the ligthing thread running
@@ -38,7 +41,8 @@ class Device // TODO singleton
         CorsairLedColor* pColors_;                      // list of all ledIds and their colors, initialized from pPositions_
         size_t numKeys_;                                // number of keys, size of pPostions_ and pColors_
         std::vector<Effect*> pEffects_;                 // effects currently in use, rendered in order from first to last
-    
+        std::vector<ReactiveEffect*> pReactEffects_;    // reactive errects currently active
+
         static Device* pInstance_;
         static HHOOK hook_;                             // hook for the current low level keyboard hook
         static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);

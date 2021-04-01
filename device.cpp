@@ -13,7 +13,7 @@ Device::~Device()
 {
     initialized_ = false;
     CorsairReleaseControl(CAM_ExclusiveLightingControl);
-    delete pColors_;
+    delete pColors_; // TODO necessary?
 }
 
 bool Device::reInit()

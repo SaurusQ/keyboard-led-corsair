@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "effect.hpp"
+#include "event.hpp"
 
 class Device
 {
@@ -36,6 +37,7 @@ class Device
         CorsairLedColor* pColors_;                      // list of all ledIds and their colors, initialized from pPositions_
         size_t numKeys_;                                // number of keys, size of pPostions_ and pColors_
         std::vector<Effect*> pEffects_;                 // effects currently in use, rendered in order from first to last
+        std::vector<Event*> pEvents_;                   // number of event currently in use
 };
 
 #endif

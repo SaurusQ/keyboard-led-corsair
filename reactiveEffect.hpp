@@ -34,7 +34,7 @@ class RE_Swipe : public ReactiveEffect
 class RE_Snake : public ReactiveEffect
 {
     public:
-        RE_Snake(Color snakeColor, Color fruitColor, float speed);
+        RE_Snake(Color snakeColor, Color fruitColor, float speed, float stepSize);
         virtual ~RE_Snake() {}
         virtual bool onlyReactive() { return false; }
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
@@ -44,6 +44,7 @@ class RE_Snake : public ReactiveEffect
         Color colorSnake_;
         Color colorFruit_;
         int speed_;                                 // how many frames does it take for the snake to move one block
+        float stepSize_;
         std::vector<Pos> snakeBody_;
         Pos fruit_;
         Dir dir_ = Dir::UP;

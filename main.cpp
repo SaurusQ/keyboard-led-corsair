@@ -26,13 +26,10 @@ int main()
 	E_OneByOne e_oneByOne(Color{255, 255, 255});
 	E_Static e_static(Color{0, 255, 0});
 	RE_Swipe re_swipe(Color{255, 255, 255});
-	RE_Snake re_snake(Color{255, 255, 0}, Color{0, 255, 255}, 1.0f);
+	RE_Snake re_snake(Color{255, 255, 0}, Color{0, 255, 255}, 0.5f, 20.0f);
 	RE_Key re_key(Color{0, 255, 0});
-	device.addEffect(&fade);
-	device.addEffect(&e_oneByOne);
-	//device.addReactiveEffect(&re_swipe);
+	device.addEffect(&clear);
 	device.addReactiveEffect(&re_snake);
-	device.addReactiveEffect(&re_key);
 	device.start();
 
 	MSG msg;

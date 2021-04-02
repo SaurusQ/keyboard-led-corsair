@@ -5,6 +5,7 @@
 std::random_device rd;
 std::mt19937 rng(rd());
 std::uniform_int_distribution<int> distr_color(0, 255);
+std::uniform_real_distribution<float> ditr_sided(-1.0f, 1.0f);
 
 unsigned int Effect::fps_ = 0;
 
@@ -44,12 +45,12 @@ void E_Ball::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
     if((posX < radius && dirVector.first < 0)
         || (posX > MAX_X - radius && dirVector.first > 0))
     {
-        dirVector.first = -dirVector.first;
+        dirVector.first = -dirVector.first + ditr_sided(rng) * 0.02f;
     }
     else if((posY < radius && dirVector.second < 0) 
         || (posY > MAX_Y - radius && dirVector.second > 0))
     {
-        dirVector.second = -dirVector.second;
+        dirVector.second = -dirVector.second + ditr_sided(rng) * 0.02f;
     }
     for(int i = 0; i < len; i++)
     {

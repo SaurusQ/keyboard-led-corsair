@@ -8,6 +8,7 @@ Device::Device(unsigned int fps)
     , lightingThreadRunning_(false)
 {
     pInstance_ = this;
+    Effect::setFps(fps);
     this->reInit();
     std::cout << "Successful init" << std::endl;
     this->setKeypressHook();
@@ -96,7 +97,7 @@ void Device::run()
     }*/
     for(auto pEff : pEffects_)
     {
-        pEff->run(pPositions_, pColors_, numKeys_, fps_);
+        pEff->run(pPositions_, pColors_, numKeys_);
     }
     CorsairSetLedsColorsBufferByDeviceIndex(0, numKeys_, pColors_);
     CorsairSetLedsColorsFlushBuffer();

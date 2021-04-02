@@ -96,7 +96,7 @@ void Device::run()
     }*/
     for(auto pEff : pEffects_)
     {
-        pEff->run(pPositions_, pColors_, numKeys_);
+        pEff->run(pPositions_, pColors_, numKeys_, fps_);
     }
     CorsairSetLedsColorsBufferByDeviceIndex(0, numKeys_, pColors_);
     CorsairSetLedsColorsFlushBuffer();

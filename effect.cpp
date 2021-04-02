@@ -63,27 +63,41 @@ void E_Ball::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 
 void E_Random::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 {
-    for(int i = 0; i < len; i++)
+    if(!crazy_)
     {
-        //pCol[i].r = distr_color(rng);
-        //pCol[i].g = distr_color(rng);
-        //pCol[i].b = distr_color(rng);
-        pCol[i].r = 0;
-        pCol[i].g = 0;
-        pCol[i].b = 0;
-        switch(distr_color(rng) % 3)
+        std::uniform_int_distribution<int> distr_array(0, len - 1);
+        storage_ += frequency_;
+        while(storage_ > 1.0f)
         {
-            case 0:
-                pCol[i].r = 255;
-                break;
-            case 1:
-                pCol[i].g = 255;
-                break;
-            case 2:
-                pCol[i].b = 255;
-                break;
+            storage_ -= 1.0f;
+            Color c = {distr_color(rng), distr_color(rng), distr_color(rng)};
+            setColor(pCol[distr_array(rng)], c);
         }
-    }    
+    }
+    else
+    {
+        for(int i = 0; i < len; i++)
+        {
+            //pCol[i].r = distr_color(rng);
+            //pCol[i].g = distr_color(rng);
+            //pCol[i].b = distr_color(rng);
+            pCol[i].r = 0;
+            pCol[i].g = 0;
+            pCol[i].b = 0;
+            switch(distr_color(rng) % 3)
+            {
+                case 0:
+                    pCol[i].r = 255;
+                    break;
+                case 1:
+                    pCol[i].g = 255;
+                    break;
+                case 2:
+                    pCol[i].b = 255;
+                    break;
+            }
+        }
+    }
 }
 
 void E_Wave::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)

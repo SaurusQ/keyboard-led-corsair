@@ -74,9 +74,14 @@ class E_Ball : public Effect
 class E_Random : public Effect
 {
     public:
-        E_Random() : Effect() {}
+        E_Random(float frequency, bool crazy = false) : Effect(), frequency_(frequency), crazy_(crazy_) {}
         virtual ~E_Random() {}
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+    protected:
+        float frequency_; // how many random colors per frame
+        float storage_ = 0.0f;
+        bool crazy_;
+
 };
 
 class E_Wave : public Effect

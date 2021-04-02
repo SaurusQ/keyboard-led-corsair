@@ -22,14 +22,15 @@ int main()
 	E_Clear clear;
 	E_Fade fade(1.0f);
 	E_Ball ball;
-	E_Random random;
+	E_Random random(10.0f);
 	E_OneByOne e_oneByOne(Color{255, 255, 255});
 	E_Static e_static(Color{0, 255, 0});
 	RE_Swipe re_swipe(Color{255, 255, 255});
 	RE_Snake re_snake(Color{255, 255, 0}, Color{0, 255, 255}, 0.5f, 20.0f);
 	RE_Key re_key(Color{0, 255, 0});
-	device.addEffect(&clear);
-	device.addReactiveEffect(&re_snake);
+	device.addEffect(&fade);
+	device.addEffect(&random);
+	//device.addReactiveEffect(&re_snake);
 	device.start();
 
 	MSG msg;

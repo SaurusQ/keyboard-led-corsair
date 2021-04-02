@@ -36,7 +36,7 @@ void RE_Snake::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 {
     static bool eat = false;
     // eating
-    if(isInSquare(snakeBody_[0], stepSize_, fruit_))
+    if(isInSquare(snakeBody_[0], 20.0f, fruit_))
     {
         fruit_ = Pos{(float)fruit_x(rng), (float)fruit_y(rng)};
         eat = true;
@@ -46,7 +46,7 @@ void RE_Snake::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
     for(int i = 0; i < len; i++)
     {
         Pos pos = {(float)pPos[i].left, (float)pPos[i].top};
-        if(isInSquare(fruit_, stepSize_, pos))
+        if(isInSquare(fruit_, 20.0f, pos))
             setColor(pCol[i], colorFruit_);
         else
         {
@@ -76,6 +76,10 @@ void RE_Snake::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
     else if(dir_ == Dir::UP) newPos.y -= stepSize_;
     else if(dir_ == Dir::LEFT) newPos.x -= stepSize_;
     else if(dir_ == Dir::RIGHT) newPos.x += stepSize_;
+    if(newPos.x > MAX_X) newPos.x = 0.0f;
+    if(newPos.y > MAX_Y) newPos.y = 0.0f;
+    if(newPos.x < 0.0f) newPos.x = MAX_X;
+    if(newPos.y < 0.0f) newPos.y = MAX_Y;
     Pos temp;
     for(auto& pos : snakeBody_)
     {

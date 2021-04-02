@@ -19,17 +19,17 @@ int main()
 	{
 		device.reInit();
 	}
-	E_Clear clear;
-	E_Fade fade(1.0f);
-	E_Ball ball;
-	E_Random random(10.0f);
+	E_Clear e_clear;
+	E_Fade e_fade(1.0f);
+	E_Ball e_ball;
+	E_Random e_random(10.0f);
 	E_OneByOne e_oneByOne(Color{255, 255, 255});
 	E_Static e_static(Color{0, 255, 0});
 	RE_Swipe re_swipe(Color{255, 255, 255});
-	RE_Snake re_snake(Color{255, 255, 0}, Color{0, 255, 255}, 0.5f, 20.0f);
+	RE_Snake re_snake(Color{255, 255, 0}, Color{0, 255, 255}, 0.001f, 10.0f);
 	RE_Key re_key(Color{0, 255, 0});
-	device.addEffect(&fade);
-	device.addEffect(&random);
+	device.addEffect(&e_clear);
+	device.addReactiveEffect(&re_snake);
 	//device.addReactiveEffect(&re_snake);
 	device.start();
 

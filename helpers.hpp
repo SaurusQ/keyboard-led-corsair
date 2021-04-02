@@ -10,8 +10,8 @@
 #include <iostream>
 #include <CUESDK.h>
 
-#define MAX_X 450
-#define MAX_Y 160
+#define MAX_X 430 // was 460
+#define MAX_Y 130 // was 150
 struct Color {
     int r;
     int g;

@@ -10,8 +10,8 @@ unsigned int Effect::fps_ = 0;
 
 E_Ball::E_Ball() : Effect() 
 {
-    std::uniform_int_distribution<int> uidX(0.0f, maxX);
-    std::uniform_int_distribution<int> uidY(0.0f, maxY);
+    std::uniform_int_distribution<int> uidX(0.0f, MAX_X);
+    std::uniform_int_distribution<int> uidY(0.0f, MAX_Y);
     //posX = (float)uidX(rng_eff);
     //posY = (float)uidY(rng_eff);
     posX = 100;
@@ -42,12 +42,12 @@ void E_Ball::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
     posX += dirVector.first;
     posY += dirVector.second;
     if((posX < radius && dirVector.first < 0)
-        || (posX > maxX - radius && dirVector.first > 0))
+        || (posX > MAX_X - radius && dirVector.first > 0))
     {
         dirVector.first = -dirVector.first;
     }
     else if((posY < radius && dirVector.second < 0) 
-        || (posY > maxY - radius && dirVector.second > 0))
+        || (posY > MAX_Y - radius && dirVector.second > 0))
     {
         dirVector.second = -dirVector.second;
     }
@@ -97,4 +97,19 @@ void E_Static::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
     {
         std::memcpy(&pCol[i].r, &color_, sizeof(color_));
     }
+}
+
+void E_OneByOne::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+{
+    static int a = 0;
+    if(a < 20) 
+    {
+        a++;
+        return;
+    }
+    a = 0;
+    std::cout << std::dec << idx << std::endl;
+    if(idx >= len) idx = 0;
+    std::memcpy(&pCol[idx].r, &color_, sizeof(color_));
+    idx++;
 }

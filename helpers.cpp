@@ -1,13 +1,19 @@
 
 #include "helpers.hpp"
 
-inline void setColor(CorsairLedColor& color, Color& newColor)
+bool isInSquare(Pos midPoint, float size, Pos another)
+{
+    return std::abs(midPoint.x - another.x) <= size
+        && std::abs(midPoint.y - another.y) <= size;
+}
+
+void setColor(CorsairLedColor& color, Color& newColor)
 {
     std::memcpy(&color.r, &newColor, sizeof(Color));
 }
 
 
-inline unsigned int scanCodeToCorsairLedIndex(unsigned int scanCode)
+unsigned int scanCodeToCorsairLedIndex(unsigned int scanCode)
 {
     switch (scanCode)
     {

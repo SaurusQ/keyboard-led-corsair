@@ -11,6 +11,11 @@
 
 #include <CUESDK.h>
 #include "helpers.hpp"
+
+// globals
+extern std::random_device rd;
+extern std::mt19937 rng;
+
 class Effect
 {
     public:

@@ -1,10 +1,8 @@
 
 #include "reactiveEffect.hpp"
 
-std::random_device rd;
-std::mt19937 rng(rd());
-std::uniform_int_distribution<float> fruit_x(0.0f, MAX_X);
-std::uniform_int_distribution<float> fruit_y(0.0f, MAX_Y);
+std::uniform_int_distribution<int> fruit_x(0.0f, MAX_X);
+std::uniform_int_distribution<int> fruit_y(0.0f, MAX_Y);
 
 void RE_Swipe::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 {
@@ -23,23 +21,47 @@ void RE_Swipe::keyEvent(unsigned int ledIdx, bool keyDown,
     if(horizontalPos_ > maxX) horizontalPos_ = 0.0f;
 }
 
-RE_Snake::RE_Snake(Color snakeColor, Color fruitColor, float speed)
+RE_Snake::RE_Snake(Color snakeColor, Color fruitColor, float speed, float stepSize)
     : ReactiveEffect(),
     colorSnake_(snakeColor),
-    colorFruit_(fruitColor)
+    colorFruit_(fruitColor),
+    stepSize_(stepSize)
 {
-    snakeBody_.push_back(Pos{0, 0});
-    fruit_ = Pos{fruit_x(rng), fruit_y(rng)};
-    speed_ = speed / fps_;
+    snakeBody_.push_back(Pos{100.0f, 100.0f});
+    fruit_ = Pos{(float)fruit_x(rng), (float)fruit_y(rng)};
+    speed_ = speed * fps_;
 }
 
 void RE_Snake::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 {
-    constexpr float close = 10.0f;
+    static bool eat = false;
+    // eating
+    if(isInSquare(snakeBody_[0], stepSize_, fruit_))
+    {
+        fruit_ = Pos{(float)fruit_x(rng), (float)fruit_y(rng)};
+        eat = true;
+    }
+
+    // rendering
     for(int i = 0; i < len; i++)
     {
-        
+        Pos pos = {(float)pPos[i].left, (float)pPos[i].top};
+        if(isInSquare(fruit_, stepSize_, pos))
+            setColor(pCol[i], colorFruit_);
+        else
+        {
+            for(auto& b : snakeBody_)
+            {
+                if(isInSquare(b, stepSize_, pos))
+                {
+                    setColor(pCol[i], colorSnake_);
+                    break;
+                }
+            }
+        }
     }
+
+    // slower logic updates
     static unsigned int track = 0;
     if(track < speed_)
     {
@@ -48,7 +70,22 @@ void RE_Snake::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
     }
     track = 0;
 
+    // logic
+    Pos newPos = snakeBody_[0];
+    if(dir_ == Dir::DOWN) newPos.y += stepSize_;
+    else if(dir_ == Dir::UP) newPos.y -= stepSize_;
+    else if(dir_ == Dir::LEFT) newPos.x -= stepSize_;
+    else if(dir_ == Dir::RIGHT) newPos.x += stepSize_;
+    Pos temp;
+    for(auto& pos : snakeBody_)
+    {
+        temp = pos;
+        pos = newPos;
+        newPos = temp;
+    }
+    if(eat) snakeBody_.push_back(newPos);
 
+    eat = false;
 }
 
 void RE_Snake::keyEvent(unsigned int ledIdx, bool keyDown,
@@ -63,5 +100,5 @@ void RE_Snake::keyEvent(unsigned int ledIdx, bool keyDown,
 void RE_Key::keyEvent(unsigned int ledIdx, bool keyDown,
     CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 {
-    std::memcpy(&pCol[ledIdx].r, &color_, sizeof(color_));
+    setColor(pCol[ledIdx], color_);
 }

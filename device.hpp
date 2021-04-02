@@ -14,6 +14,7 @@
 #include <windows.h>
 
 #include "effect.hpp"
+#include "reactiveEffect.hpp"
 
 class Device // TODO singleton
 {

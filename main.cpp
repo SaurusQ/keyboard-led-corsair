@@ -19,14 +19,16 @@ int main()
 	{
 		device.reInit();
 	}
-	EffectClear clear;
-	EffectFade fade(1.0f);
-	EffectBall ball;
-	EffectRandom random;
-	EffectStatic e_static(Color{0, 255, 0});
+	E_Clear clear;
+	E_Fade fade(1.0f);
+	E_Ball ball;
+	E_Random random;
+	E_Static e_static(Color{0, 255, 0});
 	RE_Swipe re_swipe(Color{255, 255, 255});
+	RE_Snake re_snake(Color{255, 255, 0}, Color{0, 255, 255}, 1.0f);
 	device.addEffect(&fade);
 	device.addReactiveEffect(&re_swipe);
+	device.addReactiveEffect(&re_snake);
 	device.start();
 
 	MSG msg;

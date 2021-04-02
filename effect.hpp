@@ -22,7 +22,7 @@ class Effect
     public:
         Effect() {}
         virtual ~Effect() {}
-        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len) = 0;
+        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps) = 0;
     protected:
         int alpha; //TODO
 };
@@ -42,7 +42,7 @@ class EffectClear : public Effect
     public:
         EffectClear() : Effect() {}
         virtual ~EffectClear() {}
-        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps);
 };
 
 class EffectFade : public Effect
@@ -61,7 +61,7 @@ class EffectFade : public Effect
             if(fadeCoef < 0.0f || fadeCoef > 1.0f) throw "Wrong coef";    
         }
         virtual ~EffectFade() {}
-        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps);
     protected:
         float fcr_;
         float fcg_;
@@ -72,7 +72,7 @@ class EffectBall : public Effect
     public:
         EffectBall();
         virtual ~EffectBall() {}
-        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps);
     protected:
         int posX;
         int posY;
@@ -87,7 +87,7 @@ class EffectRandom : public Effect
     public:
         EffectRandom() : Effect() {}
         virtual ~EffectRandom() {}
-        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps);
 };
 
 class EffectWave : public Effect
@@ -95,7 +95,7 @@ class EffectWave : public Effect
     public:
         EffectWave() : Effect() {}
         virtual ~EffectWave() {}
-        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps);
 };
 
 class EffectStatic : public Effect
@@ -104,7 +104,7 @@ class EffectStatic : public Effect
         EffectStatic(Color color) 
             : Effect(), color_(color) {}
         virtual ~EffectStatic() {}
-        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps);
     protected:
         Color color_;
 };
@@ -115,7 +115,7 @@ class RE_Swipe : public ReactiveEffect
         RE_Swipe(Color color) : ReactiveEffect(), color_(color) {}
     virtual ~RE_Swipe() {}
     virtual bool onlyReactive() { return false; }
-    virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+    virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps);
     virtual void keyEvent(int keyIdx, bool keyDown,
         CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
     protected:

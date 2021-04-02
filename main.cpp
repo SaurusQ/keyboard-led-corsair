@@ -20,7 +20,7 @@ int main()
 		device.reInit();
 	}
 	EffectClear clear;
-	EffectFade fade(0.9f);
+	EffectFade fade(1.0f);
 	EffectBall ball;
 	EffectRandom random;
 	EffectStatic e_static(Color{0, 255, 0});

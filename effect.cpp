@@ -16,7 +16,7 @@ EffectBall::EffectBall() : Effect()
     posY = 100;
 }
 
-void EffectClear::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+void EffectClear::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps)
 {
     for(int i = 0; i < len; i++)
     {
@@ -24,17 +24,17 @@ void EffectClear::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t le
     }
 }
 
-void EffectFade::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+void EffectFade::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps)
 {
     for(int i = 0; i < len; i++)
     {
-        pCol[i].r *= fcr_;
-        pCol[i].g *= fcg_;
-        pCol[i].b *= fcb_;;
+        pCol[i].r -= pCol[i].r * fcr_ / fps;
+        pCol[i].g -= pCol[i].g * fcr_ / fps;
+        pCol[i].b -= pCol[i].b * fcr_ / fps;
     }
 }
 
-void EffectBall::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+void EffectBall::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps)
 {
     int diff;
     posX += dirVector.first;
@@ -59,7 +59,7 @@ void EffectBall::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len
     }
 }
 
-void EffectRandom::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+void EffectRandom::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps)
 {
     for(int i = 0; i < len; i++)
     {
@@ -84,12 +84,12 @@ void EffectRandom::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t l
     }    
 }
 
-void EffectWave::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+void EffectWave::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps)
 {
 
 }
 
-void EffectStatic::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+void EffectStatic::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps)
 {
     for(int i = 0; i < len; i++)
     {
@@ -97,11 +97,11 @@ void EffectStatic::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t l
     }
 }
 
-void RE_Swipe::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
+void RE_Swipe::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len, unsigned int fps)
 {
     for(int i = 0; i < len; i++)
     {
-        if(pPos[i].left < horizontalPos_) 
+        if(pPos[i].left < horizontalPos_ && pPos[i].left > horizontalPos_ - 30.0f) 
             std::memcpy(&pCol[i].r, &color_, sizeof(color_));
     }
 }

@@ -10,8 +10,8 @@ void RE_Swipe::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 {
     for(int i = 0; i < len; i++)
     {
-        if(pPos[i].left < horizontalPos_ && pPos[i].left > horizontalPos_ - 30.0f) 
-            std::memcpy(&pCol[i].r, &color_, sizeof(color_));
+        if(pPos[i].left < horizontalPos_ && pPos[i].left > horizontalPos_ - 30.0f)
+            setColor(pCol[i], color_);
     }
 }
 

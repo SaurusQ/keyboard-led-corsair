@@ -95,7 +95,7 @@ void E_Static::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 {
     for(int i = 0; i < len; i++)
     {
-        std::memcpy(&pCol[i].r, &color_, sizeof(color_));
+        setColor(pCol[i], color_);
     }
 }
 
@@ -110,6 +110,6 @@ void E_OneByOne::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len
     a = 0;
     std::cout << std::dec << idx << std::endl;
     if(idx >= len) idx = 0;
-    std::memcpy(&pCol[idx].r, &color_, sizeof(color_));
+    setColor(pCol[idx], color_);
     idx++;
 }

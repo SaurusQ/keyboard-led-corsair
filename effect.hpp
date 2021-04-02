@@ -62,8 +62,6 @@ class E_Ball : public Effect
     protected:
         int posX;
         int posY;
-        int maxX = 450;
-        int maxY = 160;
         int radius = 30;
         std::pair<int, int> dirVector = {10, 10};
 };
@@ -93,6 +91,17 @@ class E_Static : public Effect
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
     protected:
         Color color_;
+};
+
+class E_OneByOne : public Effect
+{
+    public:
+        E_OneByOne(Color color) : Effect(), color_(color) {}
+        virtual ~E_OneByOne() {}
+        virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
+    protected:
+        Color color_;
+        unsigned int idx = 0;
 };
 
 #endif

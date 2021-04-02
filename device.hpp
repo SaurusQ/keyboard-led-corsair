@@ -15,6 +15,7 @@
 
 #include "effect.hpp"
 #include "reactiveEffect.hpp"
+#include "helpers.hpp"
 
 class Device // TODO singleton
 {
@@ -33,7 +34,7 @@ class Device // TODO singleton
         std::string errToString(CorsairError err);      // convert from corsair error message to string
     private:
         void setKeypressHook();                         // hooks the program to deted system wide keypresses from windows
-        void handleReactiveEffects(char key, bool keyDown); // handle callbacks to the reative effects
+        void handleReactiveEffects(unsigned int key, bool keyDown); // handle callbacks to the reative effects
 
         unsigned int fps_;                              // fps of the effects
         std::thread lightingThread_;                    // thread that handles ligthing

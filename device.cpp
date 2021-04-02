@@ -156,7 +156,8 @@ LRESULT CALLBACK Device::LowLevelKeyboardProc(
     {
         bool keyDown = wParam == WM_KEYDOWN;
         KBDLLHOOKSTRUCT* hs = (KBDLLHOOKSTRUCT*)lParam;
-        pInstance_->handleReactiveEffects(hs->vkCode, keyDown);
+        pInstance_->handleReactiveEffects(hs->scanCode, keyDown);
+        if(keyDown) std::cout << std::hex << hs->scanCode << std::endl;
     }
     return CallNextHookEx(hook_, nCode, wParam, lParam);
 }
@@ -175,20 +176,13 @@ void Device::setKeypressHook()
         std::cout << "Hook connection successfull" << std::endl;
 }
 
-void Device::handleReactiveEffects(char key, bool keyDown)
+void Device::handleReactiveEffects(unsigned int key, bool keyDown)
 {
-    CorsairLedId ledId = CorsairGetLedIdForKeyName(key);
-    int i = 0;
-    for(; i < numKeys_; i++)
-    {
-        if(pColors_[i].ledId == ledId)
-            break;
-    }
-    //std::cout << i << std::endl;
+    unsigned int ledIdx = scanCodeToCorsairLedIndex(key);
     const std::lock_guard<std::mutex> lock(mutex_);
     for(auto e : pReactEffects_)
     {
-        e->keyEvent(i, keyDown,
+        e->keyEvent(ledIdx, keyDown,
             pPositions_, pColors_, numKeys_);
     }
 }

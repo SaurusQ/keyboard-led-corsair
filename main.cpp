@@ -21,16 +21,28 @@ int main()
 	}
 	E_Clear e_clear;
 	E_Fade e_fade(1.0f);
-	E_Ball e_ball;
+
+	E_Ball e_ball_r(Color{255, 0, 0}, 20.0f, 0.2f);
+	E_Ball e_ball_g(Color{0, 255, 0}, 20.0f, 0.2f);
+	E_Ball e_ball_b(Color{0, 0, 255}, 20.0f, 0.2f);
+	E_Ball e_ball_pink(Color{255, 85, 255}, 20.0f, 0.2f);
+
 	E_Random e_random(10.0f);
 	E_OneByOne e_oneByOne(Color{255, 255, 255});
 	E_Static e_static(Color{0, 255, 0});
 	RE_Swipe re_swipe(Color{255, 255, 255});
 	RE_Snake re_snake(Color{255, 255, 0}, Color{0, 255, 255}, 0.001f, 10.0f);
 	RE_Key re_key(Color{0, 255, 0});
-	device.addEffect(&e_clear);
-	device.addReactiveEffect(&re_snake);
+	
+	device.addEffect(&e_fade);
+	device.addEffect(&e_ball_r);
+	device.addEffect(&e_ball_g);
+	device.addEffect(&e_ball_b);
+	device.addEffect(&e_ball_pink);
+
+	//device.addEffect(&e_clear);
 	//device.addReactiveEffect(&re_snake);
+	
 	device.start();
 
 	MSG msg;

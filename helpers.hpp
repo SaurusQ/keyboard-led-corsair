@@ -31,6 +31,7 @@ struct Pos {
 };
 
 bool isInSquare(Pos midPoint, float size, Pos another);
+bool isInCircle(Pos midPoint, float size, Pos another);
 void setColor(CorsairLedColor& color, Color& newColor);          // change color easily
 unsigned int scanCodeToCorsairLedIndex(unsigned int scanCode);   // handle converting keycodes to led ids
 

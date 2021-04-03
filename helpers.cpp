@@ -7,11 +7,15 @@ bool isInSquare(Pos midPoint, float size, Pos another)
         && std::abs(midPoint.y - another.y) <= size;
 }
 
+bool isInCircle(Pos midPoint, float size, Pos another)
+{
+    return size >= std::sqrt(std::pow(midPoint.x - another.x, 2) + std::pow(midPoint.y - another.y, 2));
+}
+
 void setColor(CorsairLedColor& color, Color& newColor)
 {
     std::memcpy(&color.r, &newColor, sizeof(Color));
 }
-
 
 unsigned int scanCodeToCorsairLedIndex(unsigned int scanCode)
 {

@@ -61,14 +61,15 @@ class E_Fade : public Effect
 class E_Ball : public Effect
 {
     public:
-        E_Ball();
+        E_Ball(Color color, int radius, float speed);
         virtual ~E_Ball() {}
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len);
     protected:
-        int posX;
-        int posY;
-        int radius = 30;
-        std::pair<int, int> dirVector = {10, 10};
+        Pos pos_;
+        int radius_ ;
+        float speed_;
+        Color color_;
+        std::pair<float, float> dirVector = {10, 10};
 };
 
 class E_Random : public Effect

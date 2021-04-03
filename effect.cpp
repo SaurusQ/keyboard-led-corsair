@@ -9,16 +9,6 @@ std::uniform_real_distribution<float> ditr_sided(-1.0f, 1.0f);
 
 unsigned int Effect::fps_ = 0;
 
-E_Ball::E_Ball() : Effect() 
-{
-    std::uniform_int_distribution<int> uidX(0.0f, MAX_X);
-    std::uniform_int_distribution<int> uidY(0.0f, MAX_Y);
-    //posX = (float)uidX(rng_eff);
-    //posY = (float)uidY(rng_eff);
-    posX = 100;
-    posY = 100;
-}
-
 void E_Clear::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 {
     for(int i = 0; i < len; i++)
@@ -37,27 +27,42 @@ void E_Fade::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
     }
 }
 
+E_Ball::E_Ball(Color color, int radius, float speed)
+    : Effect(),
+    color_(color),
+    radius_(radius),
+    speed_(speed)
+{
+    std::uniform_int_distribution<int> uidX(0.0f, MAX_X);
+    std::uniform_int_distribution<int> uidY(0.0f, MAX_Y);
+    //posX = (float)uidX(rng_eff);
+    //posY = (float)uidY(rng_eff);
+    pos_ = Pos{100.0f, 100.0f};
+}
+
 void E_Ball::run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len)
 {
-    int diff;
-    posX += dirVector.first;
-    posY += dirVector.second;
-    if((posX < radius && dirVector.first < 0)
-        || (posX > MAX_X - radius && dirVector.first > 0))
+    pos_.x += dirVector.first;
+    pos_.y += dirVector.second;
+    if((pos_.x < radius_ && dirVector.first < 0.0f)
+        || (pos_.x > MAX_X - radius_ && dirVector.first > 0.0f))
     {
-        dirVector.first = -dirVector.first + ditr_sided(rng) * 0.02f;
+        float random = ditr_sided(rng) * 1.0f;
+        dirVector.first = -dirVector.first + random;
+        dirVector.second -= random;
     }
-    else if((posY < radius && dirVector.second < 0) 
-        || (posY > MAX_Y - radius && dirVector.second > 0))
+    else if((pos_.y < radius_ && dirVector.second < 0.0f) 
+        || (pos_.y > MAX_Y - radius_ && dirVector.second > 0.0f))
     {
-        dirVector.second = -dirVector.second + ditr_sided(rng) * 0.02f;
+        float random = ditr_sided(rng) * 1.0f;
+        dirVector.second = -dirVector.second + random;
+        dirVector.first -= random;
     }
     for(int i = 0; i < len; i++)
     {
-        diff = std::sqrt(std::pow(posX - pPos[i].left, 2) + std::pow(posY - pPos[i].top, 2));
-        if(diff <= radius)
+        if(isInCircle(pos_, radius_, Pos{(float)pPos[i].left, (float)pPos[i].top}))
         {
-            pCol[i].r = 255; //std::abs((int)((diff - radius) * (255.0f / radius)));
+            setColor(pCol[i], color_);
         }
     }
 }

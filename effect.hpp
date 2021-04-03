@@ -22,6 +22,7 @@ class Effect
         Effect() {}
         virtual ~Effect() {}
         virtual void run(CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len) = 0;
+        virtual bool isReactive() { return false; }
         static void setFps(unsigned int fps) { fps_ = fps; }
     protected:
         int alpha; //TODO

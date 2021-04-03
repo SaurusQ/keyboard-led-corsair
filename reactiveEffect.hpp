@@ -11,6 +11,7 @@ class ReactiveEffect : public Effect
         ReactiveEffect() : Effect() {}
         virtual ~ReactiveEffect() {}
         virtual bool onlyReactive() { return true; }
+        virtual bool isReactive() { return true; }
         virtual void keyEvent(unsigned int ledIdx, bool keyDown,
             CorsairLedPosition* pPos, CorsairLedColor* pCol, size_t len) = 0;
 };

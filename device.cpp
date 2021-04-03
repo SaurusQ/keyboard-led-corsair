@@ -105,14 +105,16 @@ void Device::run()
 
 void Device::addEffect(Effect* pEff)
 {
-    pEffects_.push_back(pEff);
-}
-
-void Device::addReactiveEffect(ReactiveEffect* pReactEff)
-{
-    pReactEffects_.push_back(pReactEff);
-    if(!pReactEff->onlyReactive()) // check if the effect is only reactive
-        pEffects_.push_back(pReactEff);
+    if(pEff->isReactive()) // check if the effect is reactive
+    {
+        pReactEffects_.push_back((ReactiveEffect*)pEff);
+        if(!((ReactiveEffect*)pEff)->onlyReactive()) // check if the effect is only reactive
+            pEffects_.push_back((ReactiveEffect*)pEff);
+    }
+    else
+    {
+        pEffects_.push_back(pEff);
+    }
 }
 
 CorsairLedColor* Device::posToColor(CorsairLedPosition* pPos, size_t len)
